@@ -7,6 +7,7 @@ const {
   createProduct,
   getProducts,
   deleteProduct,
+  updateProduct,
 } = require("../controllers/productController");
 
 
@@ -47,6 +48,8 @@ router.post("/", createProduct); // Add new product
 
 router.get("/", getProducts);    // Get all products
 router.delete("/:id", deleteProduct); // Delete product
+// ✅ Update product
+router.put("/:id", updateProduct);
 
 module.exports = router;
 

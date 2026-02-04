@@ -23,7 +23,7 @@ const User = require("./models/User");
 
 async function seedAdmin() {
   try {
-    const exists = await User.findOne({ email: process.env.ADMIN_EMAIL || "admin@example.com" });
+    const exists = await User.findOne({ email: process.env.ADMIN_EMAIL || "admin@gmail.com" });
     if (exists) {
       console.log("⚠️ Admin already exists, skipping seeding");
       return;
@@ -31,8 +31,8 @@ async function seedAdmin() {
 
     const admin = new User({
       username: "superadmin",  // 👈 required field
-      email: process.env.ADMIN_EMAIL || "admin@example.com",
-      password: process.env.ADMIN_PASS || "securepassword123",
+      email: process.env.ADMIN_EMAIL || "admin@gmail.com",
+      password: process.env.ADMIN_PASS || "admin@123",
        role: "admin",
     });
 

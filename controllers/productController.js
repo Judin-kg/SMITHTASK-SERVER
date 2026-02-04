@@ -109,10 +109,10 @@ const generateCode = (text, firstTwo = false) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const { smithName, category, subCategory, mc, makingDuration, weight, image } = req.body;
+    const { smithName,productName,category, subCategory, mc, makingDuration, weight, image } = req.body;
     console.log(req.body,"ddddddaaata");
     
-    if (!smithName || !category || !subCategory || !mc || !makingDuration || !weight || !image) {
+    if (!smithName || !productName || !category || !subCategory || !mc || !makingDuration || !weight || !image) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
@@ -142,6 +142,7 @@ exports.createProduct = async (req, res) => {
     const product = new Product({
        productId,
       smithName,
+      productName,
       category,
       subCategory,
       mc,
@@ -179,6 +180,80 @@ exports.deleteProduct = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+
+// Update product
+exports.updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      smithName,
+      productName,
+      category,
+      subCategory,
+      mc,
+      makingDuration,
+      weight,
+      image,
+    } = req.body;
+
+    // Basic validation
+    if (
+      !smithName ||
+      !productName ||
+      !category ||
+      !subCategory ||
+      !mc ||
+      !makingDuration ||
+      !weight
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    // Find product
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    // Update fields (DO NOT update productId)
+    product.smithName = smithName;
+    product.productName = productName;
+    product.category = category;
+    product.subCategory = subCategory;
+    product.mc = mc;
+    product.makingDuration = makingDuration;
+    product.weight = weight;
+
+    // Update image only if provided
+    if (image) {
+      product.image = image;
+    }
+
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      data: product,
+    });
+  } catch (err) {
+    console.error("Error updating product:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 
 
 
